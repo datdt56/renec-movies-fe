@@ -27,8 +27,7 @@ const useUser = () => {
         wsRef.current.onmessage = (event) => {
             if (!authState) return
             const message = JSON.parse(event.data);
-            console.log(message);
-            if (message && user.email !== message.email)
+            if (message && authState.email !== message.email)
                 msgInfo(`${message.email} shared: ${message.title}`)
         }
     },[authState])
