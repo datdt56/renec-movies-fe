@@ -16,7 +16,7 @@ export const userProxy = proxy<UserProxyType>({
         this.user = data
     },
     logout ()  {
-        this.user = {}
+        userProxy.user = {}
     },
     get accessToken () {
         return this.user.accessToken || ""
