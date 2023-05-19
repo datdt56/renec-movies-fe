@@ -1,6 +1,6 @@
-import {render, screen, fireEvent, act} from '@testing-library/react';
-import { useRouter } from 'next/router';
-import { useSnapshot } from 'valtio';
+import {act, fireEvent, render, screen} from '@testing-library/react';
+import {useRouter} from 'next/router';
+import {useSnapshot} from 'valtio';
 import NavigationBar from '@/components/NavigationBar';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "@firebase/auth";
 
