@@ -26,6 +26,7 @@ const NavigationBar : React.FC = () => {
             msgSuccess("registered successfully")
         }catch (e:any) {
             if (e instanceof Error){
+                console.log(e)
                 if (e.message.includes('email-already-in-use'))
                     await handleLogin(email, password)
                 else msgError("Failed to register. " + e.message)

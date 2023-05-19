@@ -1,7 +1,10 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import {render, screen, fireEvent, act} from '@testing-library/react';
 import { useRouter } from 'next/router';
 import { useSnapshot } from 'valtio';
 import NavigationBar from '@/components/NavigationBar';
+import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "@firebase/auth";
+import {msgError, msgSuccess} from "@/common/msg";
+import {isEmpty} from "lodash";
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(),
@@ -21,6 +24,12 @@ jest.mock('@/store/user.proxy', () => ({
         user: {},
     },
 }));
+jest.mock('@firebase/auth',() => ({
+    getAuth: jest.fn().mockReturnValue({}),
+    createUserWithEmailAndPassword: jest.fn(),
+    signInWithEmailAndPassword: jest.fn(),
+    signOut: jest.fn()
+}))
 
 describe('NavigationBar', () => {
     it('should render login/register form when user is not logged in', () => {
@@ -59,4 +68,51 @@ describe('NavigationBar', () => {
         expect(shareButton).toBeInTheDocument();
         expect(logoutButton).toBeInTheDocument();
     });
+    it('should call createUserWithEmailAndPassword when handleRegister is called', () => {
+        const push = jest.fn();
+        useSnapshot.mockReturnValueOnce({ user: {} });
+
+        useRouter.mockReturnValueOnce({ push });
+
+        render(<NavigationBar />);
+
+        const emailInput = screen.getByPlaceholderText('Email');
+        const passwordInput = screen.getByPlaceholderText('Password');
+        const button = screen.getByRole('button', { name: 'Login/Register' });
+
+        act(() => {
+            fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+            fireEvent.change(passwordInput, { target: { value: 'password123' } });
+            fireEvent.click(button);
+        });
+
+        expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
+            expect.any(Object),
+            'test@example.com',
+            'password123'
+        );
+    });
+    it('should call signInWithEmailAndPassword when handleRegister is called with existing email', async () => {
+        useSnapshot.mockReturnValueOnce({ user: {} });
+        createUserWithEmailAndPassword.mockImplementation(() => {
+            throw new Error("email-already-in-use");
+        });
+        render(<NavigationBar />);
+
+        const emailInput = screen.getByPlaceholderText('Email');
+        const passwordInput = screen.getByPlaceholderText('Password');
+        const button = screen.getByRole('button', { name: 'Login/Register' });
+
+        act(() => {
+            fireEvent.change(emailInput, { target: { value: 'existing@example.com' } });
+            fireEvent.change(passwordInput, { target: { value: 'password123' } });
+            fireEvent.click(button);
+        });
+
+        await expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
+            expect.any(Object),
+            'existing@example.com',
+            'password123'
+        );
+    },5000);
 })
