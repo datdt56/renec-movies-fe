@@ -43,12 +43,12 @@ describe('Firebase Auth Tests', () => {
             const password = generateUniqueId({length:6})
             const userCredential = await createUserWithEmailAndPassword(auth, 'datdt56@gmail.com', password);
         }catch (e:any) {
-            expect(e.message.includes('email-already-in-use'))
+            expect(e.message.includes('email-already-in-use')).toBeTruthy()
         }
     });
     it('should be successful when trying to login with valid email and password', async () => {
         const userCredential = await signInWithEmailAndPassword(auth, 'datdt56@gmail.com', 'dat931');
-        expect(userCredential.user.email === 'datdt56')
+        expect(userCredential.user.email === 'datdt56@gmail.com').toBeTruthy()
     });
 
 });

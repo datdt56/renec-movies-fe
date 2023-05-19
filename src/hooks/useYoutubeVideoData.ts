@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {API_KEY} from "@/common/constant";
+import {getYoutubeDetail} from "@/common/getYoutubeDetail"
 import {msgError} from "@/common/msg";
 
 const useYoutubeVideoData = (videoId: string) => {
@@ -8,10 +8,9 @@ const useYoutubeVideoData = (videoId: string) => {
     useEffect(() => {
         let fetchCheck = true
         const fetchData = async () => {
-            const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`)
-            const data = await res.json()
-            if (data?.items[0]?.snippet && fetchCheck)
-                setData(data.items[0].snippet)
+            const data = getYoutubeDetail(videoId)
+            if (data && fetchCheck)
+                setData(data)
         }
         fetchData().then().catch(err => {
             msgError(err.message)

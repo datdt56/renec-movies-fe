@@ -1,8 +1,7 @@
 import {Button, Card, Input, Spin} from "antd";
 import {useState} from "react";
-import axios from "axios";
-import {API_URL} from "@/common/constant";
 import {msgError, msgSuccess} from "@/common/msg";
+import {shareVideo} from "@/common/shareVideo"
 
 export default function Share() {
     const [loading, setLoading] = useState(false)
@@ -10,9 +9,7 @@ export default function Share() {
     const handleShare = async () => {
         try {
             setLoading(true)
-            await axios.post(`${API_URL}/share-youtube-video`,{
-                videoURL
-            })
+            await shareVideo(videoURL)
             setVideoURL("")
             msgSuccess("shared successfully")
         }catch (e: any) {
