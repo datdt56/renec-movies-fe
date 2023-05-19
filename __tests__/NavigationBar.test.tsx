@@ -2,9 +2,7 @@ import {render, screen, fireEvent, act} from '@testing-library/react';
 import { useRouter } from 'next/router';
 import { useSnapshot } from 'valtio';
 import NavigationBar from '@/components/NavigationBar';
-import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword} from "@firebase/auth";
-import {msgError, msgSuccess} from "@/common/msg";
-import {isEmpty} from "lodash";
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "@firebase/auth";
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(),
