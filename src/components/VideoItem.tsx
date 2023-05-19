@@ -14,6 +14,7 @@ const VideoItem : React.FC<Props> = ({youtubeId, email}: Props) => {
 
     return <div className={'w-full border-b-black flex justify-center items-center flex-wrap lg:items-start mx-auto my-1'}>
         <iframe
+            role={'youtube-iframe'}
             width={width}
             height={height}
             className={'m-2'}

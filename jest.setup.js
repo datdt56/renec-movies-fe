@@ -4,3 +4,8 @@
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect'
+
+if (expect.getState().testPath.endsWith('.test.tsx')) {
+    // Set up the jsdom environment specifically for .test.tsx files
+    require('jsdom-global')();
+}
