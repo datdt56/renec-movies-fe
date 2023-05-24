@@ -8,7 +8,7 @@ const useYoutubeVideoData = (videoId: string) => {
     useEffect(() => {
         let fetchCheck = true
         const fetchData = async () => {
-            const data = getYoutubeDetail(videoId)
+            const data = await getYoutubeDetail(videoId)
             if (data && fetchCheck)
                 setData(data)
         }
